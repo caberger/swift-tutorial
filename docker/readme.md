@@ -9,7 +9,7 @@ To start the swift container run this:
 ./swift.sh
 ~~~
 
-Edit your files in the ./src/ Subfolder and run the following in the swift console:
+Then run the following in the console of the docker container:
 ~~~bash
 swift HelloWorld.swift
 ~~~
@@ -25,5 +25,4 @@ In the image below you can see how to open your source file:
 
 ![remote development](./images/remote.jpg)
 
-
-
+Here you can edit your code and compile with the swift command in the docker console again.
