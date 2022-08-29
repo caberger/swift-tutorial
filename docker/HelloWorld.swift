@@ -1,9 +1,3 @@
-class HelloWorld {
-    func hello() {
-        print("hello, world")
-    }
-}
+// note the spelling, see https://en.wikipedia.org/wiki/%22Hello,_World!%22_program
 
-let helloWorld = HelloWorld()
-helloWorld.hello()
-
+print("hello, world")
