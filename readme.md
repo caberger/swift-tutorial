@@ -4,9 +4,9 @@
 We use the [Stanford University's course CS193p (Developing Applications for iOS using SwiftUI)](https://cs193p.sites.stanford.edu/) course for these tutorials.
 
 To download the material in .pdf format run the following on change to the ./scripts folder in your bash shell and run the following:
-~~~bash
+```bash
 ./cs193p-download.sh
-~~~
+```
 
 This will store the course materials in the ./target folder.
 

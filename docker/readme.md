@@ -5,14 +5,14 @@
 We use the [swift-docker](https://github.com/apple/swift-docker) project for a first introduction to the swift programming language.
 
 To start the swift container run this:
-~~~bash
+```bash
 ./swift.sh
-~~~
+```
 
 Then run the following in the console of the docker container:
-~~~bash
+```bash
 swift HelloWorld.swift
-~~~
+```
 
 ## Development Environment without XCode
 
@@ -25,4 +25,4 @@ In the image below you can see how to open your source file:
 
 ![remote development](./images/remote.jpg)
 
-Here you can edit your code and compile with the swift command in the docker console again.
+Here you can edit your code and compile with the ```swift```command in the docker console again.
