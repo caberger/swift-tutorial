@@ -9,4 +9,4 @@ if [[ ! -f ./src/${DEMO_FILE} ]]
 then
     cp ${DEMO_FILE} ./src/
 fi
-docker run --privileged -i -t --rm -v "$PWD/src/":"/src" --workdir /src --name swift swiftdocker/swift:latest 
+docker run --privileged -i -t --rm -v "$PWD/src/":"/mnt" --workdir /mnt --name swift swiftdocker/swift:latest 
