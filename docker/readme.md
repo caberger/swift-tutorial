@@ -26,3 +26,20 @@ In the image below you can see how to open your source file:
 ![remote development](./images/remote.jpg)
 
 Here you can edit your code and compile with the ```swift```command in the docker console again.
+
+## Creating Packages
+
+For larger projects you should run the following:
+
+```bash
+mkdir demo
+cd demo
+swift package init --type executable
+swift build
+swift run
+swift test
+```
+
+The generated Package.swift is the entry point of every package, it tells us all there is to know about it, while main.swift is the entry point of your application. 
+
+For details see "[The Ultimate Guide To Swift Executables](https://www.fivestars.blog/articles/ultimate-guide-swift-executables/)"
