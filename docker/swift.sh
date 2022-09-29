@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/usr/bin/env bash 
 # runs docker e.g. docker run --privileged -i -t --rm --name swiftfun swiftdocker/swift:latest bash
 # but prepares swift for comfortable usage.
 # Author: Christian Aberger (2022)
