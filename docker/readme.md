@@ -43,3 +43,8 @@ swift test
 The generated Package.swift is the entry point of every package, it tells us all there is to know about it, while main.swift is the entry point of your application. 
 
 For details see "[The Ultimate Guide To Swift Executables](https://www.fivestars.blog/articles/ultimate-guide-swift-executables/)"
+
+## watching for changes
+```bash
+find . -type f -name "*.swift" | entr ./watch.sh
+``` 
