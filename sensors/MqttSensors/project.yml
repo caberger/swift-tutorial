@@ -1,0 +1,13 @@
+name: MqttSensors
+options:
+  bundleIdPrefix: at.htl.leonding
+targets:
+  ThingWorks:
+    info:
+      path: Sources/Info.plist
+      properties:
+        NSLocationWhenInUseUsageDescription: Aberger wants to use your location
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources: [Sources]
