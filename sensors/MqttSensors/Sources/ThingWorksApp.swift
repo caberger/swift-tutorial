@@ -1,17 +1,16 @@
-//
-//  ThingWorksApp.swift
-//  ThingWorks
-//
-//  Created by Christian Aberger on 25.10.23.
-//
-
 import SwiftUI
+
+fileprivate let locationManager = LocationViewModel()
 
 @main
 struct ThingWorksApp: App {
+    var contentView: LocationView
+    init() {
+        contentView = LocationView()
+    }
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            contentView
         }
     }
 }
