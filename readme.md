@@ -10,12 +10,6 @@ To download the material in .pdf format change to the ./scripts folder in your b
 
 This will download the course materials to the ./target subfolder of the scripts folder.
 
-## Console examples for Linux and Windows
+## Swift on other platforms
 
-### - using docker
-If you do not have access to a laptop with OSX you can run a lot of the examples with docker. 
-Refer to [docker](./docker) subfolder for this. 
-
-### - installing on Ubuntu or wsl
-see [Linux Installation Options](https://www.swift.org/install/linux/) 
-
+See [remote/readme.md](./remote/readme.md)
