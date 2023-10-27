@@ -3,12 +3,10 @@ import MQTTNIO
 import NIOCore
 import SwiftUI
 
-fileprivate let DEVICE_NAME = UIDevice.current.name
 class MqttLocationPublisher {
     let client: MQTTClient
     let jsonEncoder = JSONEncoder()
-    let topic = "mqttsensors/\(DEVICE_NAME)/location"
-    
+    let topic = "mqttsensors/\(removeSpecialCharsFrom(text: UIDevice.current.name))/location"
     init() {
         client = MQTTClient(
             host: "localhost",
@@ -44,4 +42,12 @@ class MqttLocationPublisher {
             print("cannot serialize")
         }
     }
+}
+private func removeSpecialCharsFrom(text: String) -> String {
+    let okayChars = Set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ1234567890-_")
+    var result = ""
+    for ch in text {
+        result.append(okayChars.contains(ch) ? ch : "-")
+    }
+    return result
 }
