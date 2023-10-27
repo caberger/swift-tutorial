@@ -1,13 +1,24 @@
 name: MqttSensors
 options:
   bundleIdPrefix: at.htl.leonding
+  minimumXcodeGenVersion: 2.37.0
+packages:
+  MQTTNIO:
+    url: https://github.com/swift-server-community/mqtt-nio.git
+    from: "2.9.0"
+
 targets:
   ThingWorks:
+    platform: iOS
+    type: application
+    deploymentTarget: "16.0"
+    sources: [Sources]
+    dependencies:
+      - package: MQTTNIO
+    embedd: true
     info:
       path: Sources/Info.plist
       properties:
         NSLocationWhenInUseUsageDescription: Aberger wants to use your location
-    type: application
-    platform: iOS
-    deploymentTarget: "16.0"
-    sources: [Sources]
+    build:
+      buildImplicitDependencies: true
