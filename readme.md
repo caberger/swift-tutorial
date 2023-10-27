@@ -13,3 +13,7 @@ This will download the course materials to the ./target subfolder of the scripts
 ## Swift on other platforms
 
 See [remote/readme.md](./remote/readme.md)
+
+## Swift App sending sensor values to an MQTT Server
+
+As an example application there is the [sensors](./sensors) folder, which sends the current location to am MQTT-Server.

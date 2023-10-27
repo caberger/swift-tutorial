@@ -2,6 +2,7 @@ import Foundation
 import CoreLocation
 import SwiftUI
 
+fileprivate let MIN_PLACE_RECOMPUTE_INTERVAL_IN_SECONDS = 5.0
 let statusMessages : [CLAuthorizationStatus : String] = [
     .notDetermined: "notDetermined",
     .authorizedWhenInUse: "authorizedWhenInUse",
@@ -11,8 +12,9 @@ let statusMessages : [CLAuthorizationStatus : String] = [
 ]
 
 class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
-    @Published private(set) var locationModel = LocationModel()
-    @Published private(set) var locationStatus: CLAuthorizationStatus?
+    @Published var locationModel: LocationModel!
+    var lastTimePlaceMarkWasComputed = Date.now - MIN_PLACE_RECOMPUTE_INTERVAL_IN_SECONDS
+    var locationPublisher: MqttLocationPublisher?
 
     private var locationManager = CLLocationManager()
     private let geoCoder = CLGeocoder()
@@ -28,6 +30,7 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     override init() {
         super.init()
+        self.locationModel = locationModel
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
@@ -40,16 +43,31 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
         return place
     }
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let lastLocation = locations.last {
-            let location = LocationData(longitude: lastLocation.coordinate.latitude, latitude: lastLocation.coordinate.longitude)
-            locationModel.locationChanged(location)
-            Task {
-                let place = await computePlace(loc: lastLocation)
+    private func changed(location loc: CLLocation) {
+        let location = LocationData(longitude: loc.coordinate.latitude, latitude: loc.coordinate.longitude)
+        locationModel.locationChanged(location)
+        Task {
+            let elapsed = Date.now.timeIntervalSince(lastTimePlaceMarkWasComputed)
+            if (elapsed > MIN_PLACE_RECOMPUTE_INTERVAL_IN_SECONDS) {
+                let place = await computePlace(loc: loc)
+                lastTimePlaceMarkWasComputed = Date.now
                 DispatchQueue.main.async {
                     self.locationModel.computed(place: place)
                 }
             }
+            if let publisher = self.locationPublisher {
+                do {
+                    try await publisher.publish(location: location)
+                } catch {
+                    print("failed to publish: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let lastLocation = locations.last {
+            let location = LocationData(longitude: lastLocation.coordinate.latitude, latitude: lastLocation.coordinate.longitude)
+            changed(location: lastLocation)
         }
     }
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {

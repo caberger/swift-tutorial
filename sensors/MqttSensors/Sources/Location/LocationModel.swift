@@ -2,7 +2,7 @@ import CoreLocation
 
 typealias Coordinate = Double
 
-struct LocationData {
+struct LocationData: Codable {
     var longitude: Coordinate
     var latitude: Coordinate
 }

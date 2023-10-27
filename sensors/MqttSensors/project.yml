@@ -6,6 +6,9 @@ packages:
   MQTTNIO:
     url: https://github.com/swift-server-community/mqtt-nio.git
     from: "2.9.0"
+  NIOCore:
+    url: https://github.com/apple/swift-nio.git
+    from: "2.42.0"
 
 targets:
   ThingWorks:
@@ -15,10 +18,9 @@ targets:
     sources: [Sources]
     dependencies:
       - package: MQTTNIO
+      - package: NIOCore
     embedd: true
     info:
       path: Sources/Info.plist
       properties:
         NSLocationWhenInUseUsageDescription: Aberger wants to use your location
-    build:
-      buildImplicitDependencies: true

@@ -1,13 +1,13 @@
 import SwiftUI
 
 struct LocationView: View {
-    @ObservedObject var viewModel = LocationViewModel()
+    @ObservedObject var viewModel: LocationViewModel
     
     var longitude: String {
-        viewModel.locationData != nil ? String(round(viewModel.locationData!.longitude.rounded())) : ""
+        viewModel.locationData != nil ? String(viewModel.locationData!.longitude) : ""
     }
     var latitude: String {
-        viewModel.locationData != nil ? String(viewModel.locationData!.latitude.rounded()) : ""
+        viewModel.locationData != nil ? String(viewModel.locationData!.latitude) : ""
     }
     var addr: AddressModel {
         viewModel.address
@@ -36,8 +36,10 @@ struct LocationView: View {
 }
 
 struct ContentView_Previews: PreviewProvider {
-    static let locationManager = LocationViewModel()
+    static let locationModel = LocationModel()
+    static let locationViewModel = LocationViewModel()
     static var previews: some View {
-        LocationView()
+        locationViewModel.locationModel = locationModel
+        return LocationView(viewModel: locationViewModel)
     }
 }
