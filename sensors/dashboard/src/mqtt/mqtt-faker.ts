@@ -1,7 +1,7 @@
 /** submit demo values for simulating a real box
 */
 
-import { client, mqttConfig } from "./mqtt"
+import { client } from "./mqtt"
 import { MeasurementValue } from "../model"
 
 setInterval(send, 1000)

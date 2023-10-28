@@ -3,7 +3,6 @@ import {DashboardModel, Sensor, store} from "../model"
 import { filter, map } from "rxjs"
 import _ from "lodash"
 import { styles } from "../styles/styles"
-import { mqttConfig } from "../mqtt"
 
 import "./connection-icon"
 
@@ -106,7 +105,7 @@ function template(vm: AppComponentViewModel)  {
         <span class="w3-monospace">
             <mqtt-connected-icon></mqtt-connected-icon>
             Locations
-        </span> ws://${mqttConfig.host}:${mqttConfig.port}
+        </span>
         </h3>
     </div>
     <section>

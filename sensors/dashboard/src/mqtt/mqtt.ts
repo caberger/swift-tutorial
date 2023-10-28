@@ -2,12 +2,16 @@
  * paho javascript client, see https://github.com/eclipse/paho.mqtt.javascript#readme
  */
 import {Client, ErrorWithInvocationContext, MQTTError, Message} from "paho-mqtt"
-import { mqttConfig } from "./config"
-export {mqttConfig}
 
-export type MessageReceivedHandler = (message: Message) => void
-export type ConnectionStateCallback = (connected: boolean) => void
+type MessageReceivedHandler = (message: Message) => void
+type ConnectionStateCallback = (connected: boolean) => void
 
+export interface ConnectionParameters {
+    config: MqttConfig
+    messageHandler: MessageReceivedHandler,
+    statusCallback: ConnectionStateCallback,
+    filter: string
+}
 export interface MqttConfig {
     host: string
     port: number
@@ -15,24 +19,33 @@ export interface MqttConfig {
 }
 export let client: Client
 
-let messageReceivedHander: MessageReceivedHandler = onMessageArrived
-let connectionStateCallback = setConnected
+const defaultConfig: MqttConfig = {
+    host: "localhost",
+    port: 9001,
+    clientId: "mqttdashboard",
+}
+let params: ConnectionParameters = {
+    messageHandler: onMessageArrived,
+    statusCallback: defaultConnectedState,
+    filter: "#",
+    config: defaultConfig
+}
 
 let timer: NodeJS.Timeout
 
-export function start(messageHandler: MessageReceivedHandler, connected: ConnectionStateCallback) {
-    messageReceivedHander = messageHandler
-    connectionStateCallback = connected
+export function start(config: ConnectionParameters) {
+    params = config
     connect()
 }
 
 function connect() {
+    const mqttConfig = params.config
     client = new Client(mqttConfig.host, mqttConfig.port, mqttConfig.clientId)
     console.log(`connecting to ${mqttConfig.host}:${mqttConfig.port}/${mqttConfig.clientId}`)
-    client.onMessageArrived = messageReceivedHander
+    client.onMessageArrived = params.messageHandler
     client.onConnectionLost = onConnectionLost
 
-    setConnected(false)
+    params.statusCallback(false)
     try {
         client.connect({
             onSuccess: onConnect,
@@ -48,12 +61,10 @@ function connect() {
 }
 
 function onConnect() {
-    console.log("connected to", mqttConfig)
-    const filter = "mqttsensors/#"
-    console.log("subscribing to", filter)
-    client.subscribe(filter)
-    console.log("subscribed to", filter)
-    setConnected(true)
+    console.log("connected to", params.config)
+    console.log("subscribing to", params.filter)
+    client.subscribe(params.filter)
+    params.statusCallback(true)
 }
 function onMessageArrived(message: Message) {
     console.log("message arrived", message.payloadString, message.destinationName)
@@ -61,7 +72,7 @@ function onMessageArrived(message: Message) {
 function checkConnection() {
     console.log("connection check", client, "isconn", client?.isConnected())
     if (!client || !client.isConnected()) {
-        setConnected(false)
+        params.statusCallback(false)
         client = null
         console.log("not connected")
         connect()
@@ -69,11 +80,11 @@ function checkConnection() {
 }
 function onConnectionLost(error: MQTTError) {
     console.log("connection lost", error)
-    setConnected(false)
+    params.statusCallback(false)
 }
 function onConnectError(e: ErrorWithInvocationContext) {
     console.log("failed to connect: ", e)
 }
-function setConnected(connected: boolean) {
+function defaultConnectedState(connected: boolean) {
     console.log("connection state changed to", connected)
 }

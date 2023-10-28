@@ -1,1 +1,1 @@
-export {mqttConfig} from "./mqtt"
+export {start, MqttConfig} from "./mqtt"

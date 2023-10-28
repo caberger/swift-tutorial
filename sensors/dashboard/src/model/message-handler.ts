@@ -1,9 +1,19 @@
 import { Message } from "paho-mqtt"
-import { start } from "../mqtt/mqtt"
+import { start, MqttConfig } from "../mqtt"
 import { produce } from "immer"
 import { store } from "./dashboard-model"
 
-start(onMessageArrived, setConnected)
+export const mqttConfig: MqttConfig = {
+    host: "localhost",
+    port: 9001,
+    clientId: "mqttdashboard",
+}
+start({
+    messageHandler: onMessageArrived,
+    statusCallback: setConnected,
+    filter: "mqttsensors/+/location",
+    config: mqttConfig
+})
 
 function setConnected(connected: boolean) {
     const next = produce(store.getValue(), model => {
