@@ -2,12 +2,12 @@
  * paho javascript client, see https://github.com/eclipse/paho.mqtt.javascript#readme
  */
 import {Client, ErrorWithInvocationContext, MQTTError, Message} from "paho-mqtt"
-import { store } from "../model"
-import { produce } from "immer"
 import { mqttConfig } from "./config"
+export {mqttConfig}
 
 export type MessageReceivedHandler = (message: Message) => void
-export {mqttConfig}
+export type ConnectionStateCallback = (connected: boolean) => void
+
 export interface MqttConfig {
     host: string
     port: number
@@ -16,12 +16,13 @@ export interface MqttConfig {
 export let client: Client
 
 let messageReceivedHander: MessageReceivedHandler = onMessageArrived
+let connectionStateCallback = setConnected
+
 let timer: NodeJS.Timeout
 
-setInterval(() => checkConnection(), 5000)
-
-export function start(messageHandler: MessageReceivedHandler) {
+export function start(messageHandler: MessageReceivedHandler, connected: ConnectionStateCallback) {
     messageReceivedHander = messageHandler
+    connectionStateCallback = connected
     connect()
 }
 
@@ -69,15 +70,10 @@ function checkConnection() {
 function onConnectionLost(error: MQTTError) {
     console.log("connection lost", error)
     setConnected(false)
-    setTimeout(() => checkConnection(), 500)
 }
 function onConnectError(e: ErrorWithInvocationContext) {
     console.log("failed to connect: ", e)
 }
 function setConnected(connected: boolean) {
-    const next = produce(store.getValue(), model => {
-        model.connected = connected
-    })
-    store.next(next)
-
+    console.log("connection state changed to", connected)
 }
