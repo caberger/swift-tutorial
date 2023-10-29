@@ -2,7 +2,8 @@
 */
 
 import { client } from "./mqtt"
-import { MeasurementValue } from "../model"
+import {  } from "../model"
+import { LocationData } from "../model/dashboard-model"
 
 setInterval(send, 1000)
 
@@ -17,7 +18,7 @@ function sendDummyData() {
     const topic = `$mqttsensors/${createRandomPhoneName()}/location`
     const longitude = Math.round(Math.random() * 360)
     const latitude = Math.round(Math.random() * 360)
-    const val: MeasurementValue = {
+    const val: LocationData = {
         longitude,
         latitude
     }

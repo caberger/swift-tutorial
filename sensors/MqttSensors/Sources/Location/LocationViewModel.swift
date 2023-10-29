@@ -66,7 +66,7 @@ class LocationViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let lastLocation = locations.last {
-            let location = LocationData(longitude: lastLocation.coordinate.latitude, latitude: lastLocation.coordinate.longitude)
+            //let location = LocationData(longitude: lastLocation.coordinate.latitude, latitude: lastLocation.coordinate.longitude)
             changed(location: lastLocation)
         }
     }

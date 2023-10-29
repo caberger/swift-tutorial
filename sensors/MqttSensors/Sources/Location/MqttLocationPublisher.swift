@@ -19,7 +19,6 @@ class MqttLocationPublisher {
         self.client = client
     }
     func connect() async -> (Bool, String?) {
-        //jsonEncoder.outputFormatting = .prettyPrinted
         var msg: String?
         var ok = false
         do {

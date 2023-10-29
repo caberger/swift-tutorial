@@ -1,23 +1,26 @@
 import { BehaviorSubject } from "rxjs"
+import { MqttConfig } from "../mqtt"
 
-export interface SensorBox {
-    readonly name: string
-    readonly sensors: Map<string, Sensor>
+export interface LocationData {
+    longitude: number,
+    latitude: number
 }
-export interface Sensor {
+export interface Device {
     readonly name: string
-    readonly lastValueReceivedAt: number
-    readonly value: number
+    readonly lastValueReceivedAt: Date
+    location: LocationData
 }
 
 export interface DashboardModel {
+    readonly mqttConfig: MqttConfig
     readonly connected: boolean // are we connected to mqtt?
-    readonly boxes: Map<string, SensorBox>
+    readonly devices: Map<string, Device>
 }
 
 const initialState: DashboardModel = {
     connected: false,
-    boxes: new Map()
+    devices: new Map(),
+    mqttConfig: undefined
 }
 
 export const store = new BehaviorSubject<DashboardModel>(initialState)
