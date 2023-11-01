@@ -9,7 +9,14 @@ We use a pure [Single-Source-Of-Truth](https://redux.js.org/understanding/thinki
 
 ## Building
 
+The Gradle Wrapper is not part of our source code, so it is not checked into this repository.
+If you did not do so already, install your own gradle e.g. with:
+```bash
+brew install gradle
+```
+
 Make sure you select Java 17 or higher as Gradle's Java Version.
+
 
 ## Troubleshooting.
 
