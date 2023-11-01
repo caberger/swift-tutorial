@@ -22,10 +22,13 @@ import at.ac.htl.sensors.ui.theme.AndroidMqttSensorsTheme
 
 class MainActivity : ComponentActivity() {
     private var locationManager = LocationManager()
+    private var publisher = MqttPublisher()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         locationManager.requestPermissions(this)
         val viewModel: LocationViewModel by viewModels()
+        publisher.connect(this)
+        publisher.startPublishing(viewModel.store.map { it.locationData })
         setContent {
             AndroidMqttSensorsTheme {
                 Surface(
