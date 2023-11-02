@@ -9,8 +9,10 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletionException;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import at.ac.htl.sensors.model.Mapper;
@@ -80,13 +82,21 @@ public class MqttPublisher<T extends Object> {
     }
     public void disconnect() {
         try {
-            client.disconnect();
+            if (client.isConnected()) {
+                client.disconnect();
+            }
         } catch (MqttException e) {
             Log.e(TAG, "failed to disconnect", e);
             throw new RuntimeException(e);
         }
         connectedObservable.onNext(client.isConnected());
         scheduler.shutdown();
+        try {
+            scheduler.awaitTermination(5, TimeUnit.SECONDS);
+            client = null;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
     private boolean isOK() {
         return client != null && client.isConnected();

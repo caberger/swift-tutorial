@@ -4,8 +4,6 @@ import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.os.Looper;
 import android.util.Log;
 
 import androidx.activity.ComponentActivity;
@@ -16,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
@@ -32,8 +31,10 @@ public class LocationManager {
     private LocationRequest locationRequest;
     private Disposable locationServiceStateSubscription;
     final private MqttLocationPublisher publisher = new MqttLocationPublisher();
+    private LocationListener locationListener;
+    private Disposable connectedSubscription;
 
-    public void start(ComponentActivity activity) {
+    private void startRequestAndPublish(ComponentActivity activity) {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
         if (ActivityCompat.checkSelfPermission(activity, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(activity, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -42,7 +43,7 @@ public class LocationManager {
         locationRequest = new LocationRequest.Builder(2000).build();
         final var viewModel = new ViewModelProvider(activity).get(LocationViewModel.class);
 
-        publisher
+        connectedSubscription = publisher
                 .connected()
                 .distinctUntilChanged()
                 .subscribe(connected -> {
@@ -51,13 +52,11 @@ public class LocationManager {
                 });
         publisher.connect();
         publisher.startPublishing(viewModel.getStore().map(model -> model.locationData));
-
-        fusedLocationClient.requestLocationUpdates(locationRequest, loc -> {
-            viewModel.next(model -> model.locationData = new Model.LocationData(loc.getLatitude(), loc.getLongitude(), true));
-        }, activity.getMainLooper());
+        locationListener = loc -> viewModel.next(model -> model.locationData = new Model.LocationData(loc.getLatitude(), loc.getLongitude(), true));
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationListener, activity.getMainLooper());
         Log.i(TAG, "Location Requests started");
     }
-    public void requestPermissions(ComponentActivity activity) {
+    public void start(ComponentActivity activity) {
         activity
             .registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
                     result -> evaluateRequestedPermissionsResult(activity, result))
@@ -68,17 +67,6 @@ public class LocationManager {
         final var available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(activity) == ConnectionResult.SUCCESS;
         Log.i(TAG, "Play services available: " + (available ? "true" : "false"));
     }
-    private void subscribeToLocationServiceStateChanges(ComponentActivity activity) {
-        final var viewModel = new ViewModelProvider(activity).get(LocationViewModel.class);
-        locationServiceStateSubscription = viewModel.getStore().subscribe(model -> {
-            if (!model.locationServicesStarted) {
-                if (model.permissions.coarse() || model.permissions.fine()) {
-                    viewModel.next(mdl -> mdl.locationServicesStarted = true);
-                    activity.runOnUiThread(() -> start(activity));
-                }
-            }
-        });
-    }
     private void evaluateRequestedPermissionsResult(ComponentActivity activity, Map<String, Boolean> result) {
         subscribeToLocationServiceStateChanges(activity);
         final var coarseAllowed = Boolean.TRUE.equals(result.getOrDefault(ACCESS_COARSE_LOCATION, false));
@@ -86,6 +74,31 @@ public class LocationManager {
         final var viewModel = new ViewModelProvider(activity).get(LocationViewModel.class);
         viewModel.next(model -> {
             model.permissions = new Model.LocationPermissions(fineAllowed, coarseAllowed);
+        });
+        startRequestAndPublish(activity);
+    }
+    public void stop() {
+        if (connectedSubscription != null) {
+            connectedSubscription.dispose();
+            connectedSubscription = null;
+        }
+        if (locationListener != null) {
+            fusedLocationClient.removeLocationUpdates(locationListener);
+            fusedLocationClient = null;
+        }
+        if (publisher != null) {
+            publisher.stopPublishing();
+        }
+    }
+    private void subscribeToLocationServiceStateChanges(ComponentActivity activity) {
+        final var viewModel = new ViewModelProvider(activity).get(LocationViewModel.class);
+        locationServiceStateSubscription = viewModel.getStore().subscribe(model -> {
+            if (!model.locationServicesStarted) {
+                if (model.permissions.coarse() || model.permissions.fine()) {
+                    viewModel.next(mdl -> mdl.locationServicesStarted = true);
+                    //activity.runOnUiThread(() -> startRequestAndPublish(activity));
+                }
+            }
         });
     }
 }

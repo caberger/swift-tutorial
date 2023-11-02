@@ -24,7 +24,6 @@ class MainActivity : ComponentActivity() {
     private var locationManager = LocationManager()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        locationManager.requestPermissions(this)
         val viewModel: LocationViewModel by viewModels()
 
         setContent {
@@ -37,6 +36,16 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        locationManager.start(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        locationManager.stop()
     }
 }
 

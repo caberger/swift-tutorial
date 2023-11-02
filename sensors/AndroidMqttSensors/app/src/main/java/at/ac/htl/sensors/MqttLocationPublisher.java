@@ -31,5 +31,6 @@ public class MqttLocationPublisher {
     }
     public void stopPublishing() {
         subscription.dispose();
+        publisher.disconnect();
     }
 }
