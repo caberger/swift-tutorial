@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.function.Consumer;
 
+import at.ac.htl.sensors.MqttLocationPublisher;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.core.Observable;
 
@@ -14,6 +15,7 @@ public class LocationViewModel extends ViewModel {
     public BehaviorSubject<Model> getStore() {
         return store;
     }
+
     public void next(Consumer<Model> reducer) {
         var current = store.getValue();
         var nextState = mapper.clone(current);

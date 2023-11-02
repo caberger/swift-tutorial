@@ -25,6 +25,6 @@ Currently there is a problem with location simulation in the android virtual dev
 You can use the following work around:
 
 - In the Simulator log into Play Store
-- install a Mock GPS app like [Mock Locations ](https://play.google.com/store/apps/details?id=ru.gavrikov.mocklocations) on your simulator
+- install a Mock GPS app like [Mock Locations](https://play.google.com/store/apps/details?id=ru.gavrikov.mocklocations) on your simulator
 - enable Developer Settings on your simulator
 - In Developer Settings select the installed Mock Simulator as "Mock GPS App"

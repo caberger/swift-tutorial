@@ -31,6 +31,7 @@ public class LocationManager {
     private FusedLocationProviderClient fusedLocationClient;
     private LocationRequest locationRequest;
     private Disposable locationServiceStateSubscription;
+    final private MqttLocationPublisher publisher = new MqttLocationPublisher();
 
     public void start(ComponentActivity activity) {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
@@ -38,10 +39,17 @@ public class LocationManager {
                 ActivityCompat.checkSelfPermission(activity, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             throw new RuntimeException("Fatal: You did not request Location permissions in your code");
         }
-        locationRequest = new LocationRequest.Builder(2000)
-                .build();
+        locationRequest = new LocationRequest.Builder(2000).build();
 
+        publisher
+                .connected()
+                .distinctUntilChanged()
+                .subscribe(connected -> {
+                    Log.i(TAG, "publisher connected: " + connected.toString());
+                });
+        publisher.connect();
         final var viewModel = new ViewModelProvider(activity).get(LocationViewModel.class);
+        publisher.startPublishing(viewModel.getStore().map(model -> model.locationData));
 
         fusedLocationClient.requestLocationUpdates(locationRequest, loc -> {
             viewModel.next(model -> model.locationData = new Model.LocationData(loc.getLatitude(), loc.getLongitude(), true));
