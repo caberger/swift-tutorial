@@ -25,6 +25,7 @@ public class MqttLocationPublisher {
     public Observable<Boolean> connected() {
         return publisher.connected();
     }
+
     public void startPublishing(Observable<Model.LocationData> data) {
         subscription = data.subscribe(publisher::publish);
     }

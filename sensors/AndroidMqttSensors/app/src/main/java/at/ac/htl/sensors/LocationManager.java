@@ -40,15 +40,16 @@ public class LocationManager {
             throw new RuntimeException("Fatal: You did not request Location permissions in your code");
         }
         locationRequest = new LocationRequest.Builder(2000).build();
+        final var viewModel = new ViewModelProvider(activity).get(LocationViewModel.class);
 
         publisher
                 .connected()
                 .distinctUntilChanged()
                 .subscribe(connected -> {
                     Log.i(TAG, "publisher connected: " + connected.toString());
+                    viewModel.next(model -> model.isMqttConnected = connected);
                 });
         publisher.connect();
-        final var viewModel = new ViewModelProvider(activity).get(LocationViewModel.class);
         publisher.startPublishing(viewModel.getStore().map(model -> model.locationData));
 
         fusedLocationClient.requestLocationUpdates(locationRequest, loc -> {

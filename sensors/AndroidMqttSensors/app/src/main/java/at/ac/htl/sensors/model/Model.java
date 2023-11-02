@@ -22,6 +22,7 @@ public class Model {
         }
     }
     public boolean locationServicesStarted = false;
+    public boolean isMqttConnected = false;
     public LocationData locationData = new LocationData();
     public LocationPermissions permissions = new LocationPermissions();
 }

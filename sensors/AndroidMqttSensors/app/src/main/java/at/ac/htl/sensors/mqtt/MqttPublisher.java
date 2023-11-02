@@ -51,34 +51,32 @@ public class MqttPublisher<T extends Object> {
 
     private void scheduleConnectionKeeper(Config config) {
         Runnable keeper = () -> {
-            if (!client.isConnected()) {
-                Log.i(TAG, String.format("connecting to Mqtt service as %s", config.toString()));
+            Log.i(TAG, "check for valid connection.");
+            if (client == null) {
                 try {
-                    if (!client.isConnected()) {
-                        client.connect();
-                    } else {
-                        Log.d(TAG, "new client already is connected");
-                    }
+                    client = new MqttClient(config.broker, config.clientId, new MemoryPersistence());
                 } catch (MqttException e) {
-                    Log.i(TAG, "failed to connect", e);
+                    Log.e(TAG, "failed to create client", e);
                 }
             }
-            connectedObservable.onNext(client.isConnected());
+            if (client != null) {
+                if (!client.isConnected()) {
+                    Log.i(TAG, String.format("connecting to Mqtt service as %s", config.toString()));
+                    try {
+                        client.connect();
+                    } catch (MqttException e) {
+                        Log.i(TAG, "failed to connect", e);
+                    }
+                }
+                connectedObservable.onNext(client.isConnected());
+            }
         };
-        scheduler.scheduleAtFixedRate(keeper, 0, 5000, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(keeper, 0, 2, TimeUnit.SECONDS);
     }
     public void connect(Config config, String topic) {
         assert(client == null);
-
         this.topic = topic;
-        var persistence = new MemoryPersistence();
-        try {
-            client = new MqttClient(config.broker, config.clientId, persistence);
-            scheduleConnectionKeeper(config);
-        } catch (MqttException e) {
-            Log.e(TAG, "failed to create client", e);
-            throw new RuntimeException(e);
-        }
+        scheduleConnectionKeeper(config);
     }
     public void disconnect() {
         try {
@@ -90,19 +88,21 @@ public class MqttPublisher<T extends Object> {
         connectedObservable.onNext(client.isConnected());
         scheduler.shutdown();
     }
+    private boolean isOK() {
+        return client != null && client.isConnected();
+    }
     public void publish(T data) {
         var json = mapper.toResource(data);
         var body = json.getBytes(StandardCharsets.UTF_8);
         var message = new MqttMessage(body);
         try {
-            if (client.isConnected()) {
+            if (isOK()) {
                 client.publish(topic, message);
             } else {
                 Log.i(TAG, "client is not connected");
             }
-        } catch (MqttException e) {
-            Log.i(TAG, "failed to publish", e);
-            throw new CompletionException(e);
+        } catch (Exception e) {
+            Log.e(TAG, "failed to publish", e);
         }
     }
 }
