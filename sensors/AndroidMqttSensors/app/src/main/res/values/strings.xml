@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">AndroidMqttSensors</string>
-    <string name="disconneced">disconnected</string>
+    <string name="connection_status">Connection State</string>
 </resources>

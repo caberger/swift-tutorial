@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -62,6 +64,12 @@ fun LocationView(viewModel: LocationViewModel) {
     var connected: State<Boolean> = store.map { it.isMqttConnected }.subscribeAsState(initial = false)
     val locationData: State<Model.LocationData> = store.map { it.locationData }.subscribeAsState(Model.LocationData())
     val txt = if (locationData.value.valid) "(${locationData.value.latitude}, ${locationData.value.longitude})" else "..."
+    var connectionId = R.drawable.disconnected
+    var color = Color.Red
+    if (connected.value) {
+        color = Color.Transparent
+        connectionId = R.drawable.connected
+    }
     val connIconId = if (connected.value) R.drawable.connected else R.drawable.disconnected
     val padding = 16.dp
     Column(
@@ -73,22 +81,14 @@ fun LocationView(viewModel: LocationViewModel) {
         ) {
         Icon(
             painter = painterResource(connIconId),
-            contentDescription = stringResource(id = R.string.disconneced),
-            modifier = Modifier.size(size = 32.dp)
+            contentDescription = stringResource(id = R.string.connection_status),
+            modifier = Modifier.size(size = 32.dp).background(color)
         )
         Spacer(Modifier.size(padding))
         Text(
             text = txt
         )
     }
-    /*
-    Row() {
-        Column(modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally) {
-        }
-    }
-     */
 }
 @Preview(showBackground = true)
 @Composable
