@@ -44,8 +44,7 @@ public class LocationManager {
         final var viewModel = new ViewModelProvider(activity).get(LocationViewModel.class);
 
         connectedSubscription = publisher
-                .connected()
-                .distinctUntilChanged()
+                .isConnected()
                 .subscribe(connected -> {
                     Log.i(TAG, "publisher connected: " + connected.toString());
                     viewModel.next(model -> model.isMqttConnected = connected);
@@ -96,7 +95,6 @@ public class LocationManager {
             if (!model.locationServicesStarted) {
                 if (model.permissions.coarse() || model.permissions.fine()) {
                     viewModel.next(mdl -> mdl.locationServicesStarted = true);
-                    //activity.runOnUiThread(() -> startRequestAndPublish(activity));
                 }
             }
         });

@@ -8,11 +8,8 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.CompletionException;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import at.ac.htl.sensors.model.Mapper;
@@ -41,7 +38,7 @@ public class MqttPublisher<T extends Object> {
                     '}';
         }
     }
-    public Observable<Boolean> connected() {
+    public Observable<Boolean> isConnected() {
         return connectedObservable;
     }
     public MqttPublisher(Class<? extends T> clazz) {
@@ -53,7 +50,6 @@ public class MqttPublisher<T extends Object> {
 
     private void scheduleConnectionKeeper(Config config) {
         Runnable keeper = () -> {
-            Log.i(TAG, "check for valid connection.");
             if (client == null) {
                 try {
                     client = new MqttClient(config.broker, config.clientId, new MemoryPersistence());
@@ -70,7 +66,9 @@ public class MqttPublisher<T extends Object> {
                         Log.i(TAG, "failed to connect", e);
                     }
                 }
-                connectedObservable.onNext(client.isConnected());
+                final var isConnected = Boolean.valueOf(client.isConnected());
+                Log.i(TAG, "check for valid connection: " + isConnected.toString());
+                connectedObservable.onNext(isConnected);
             }
         };
         scheduler.scheduleAtFixedRate(keeper, 0, 2, TimeUnit.SECONDS);

@@ -11,14 +11,14 @@ We use a pure [Single-Source-Of-Truth](https://redux.js.org/understanding/thinki
 
 The Gradle Wrapper is not part of our source code, so it is not checked into this repository.
 If you did not do so already, install your own gradle e.g. with:
+
 ```bash
 brew install gradle
 ```
 
 Make sure you select Java 17 or higher as Gradle's Java Version.
 
-
-## Troubleshooting.
+## Troubleshooting
 
 Currently there is a problem with location simulation in the android virtual device emulator, see [here](https://issuetracker.google.com/issues/242438611?pli=1).
 

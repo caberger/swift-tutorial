@@ -1,16 +1,18 @@
 package at.ac.htl.sensors;
 
-import android.content.Context;
 import android.os.Build;
 
 import at.ac.htl.sensors.model.Model;
 import at.ac.htl.sensors.mqtt.MqttPublisher;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
+import io.reactivex.rxjava3.subjects.Subject;
 
 public class MqttLocationPublisher {
     private MqttPublisher<Model.LocationData> publisher = new MqttPublisher<>(Model.LocationData.class);
     private Disposable subscription;
+    private Subject<Boolean> connectedObservable = BehaviorSubject.createDefault(false);
 
     public void connect() {
         publisher = new MqttPublisher<>(Model.LocationData.class);
@@ -21,11 +23,11 @@ public class MqttLocationPublisher {
         config.clientId = String.format("%s-%s-%s", deviceModel, deviceBrand, deviceName);
         var topic = String.format("%s/location", deviceName);
         publisher.connect(config, topic);
+        publisher.isConnected().subscribe(connected -> connectedObservable.onNext(connected));
     }
-    public Observable<Boolean> connected() {
-        return publisher.connected();
+    public Observable<Boolean> isConnected() {
+        return connectedObservable;
     }
-
     public void startPublishing(Observable<Model.LocationData> data) {
         subscription = data.subscribe(publisher::publish);
     }
