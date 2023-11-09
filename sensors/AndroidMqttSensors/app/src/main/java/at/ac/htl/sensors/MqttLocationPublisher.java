@@ -17,11 +17,9 @@ public class MqttLocationPublisher {
     public void connect() {
         publisher = new MqttPublisher<>(Model.LocationData.class);
         final var config = publisher.createConfiguration();
-        var deviceModel = Build.MODEL;
-        var deviceBrand = Build.MANUFACTURER;
         var deviceName = Build.DEVICE;
-        config.clientId = String.format("%s-%s-%s", deviceModel, deviceBrand, deviceName);
-        var topic = String.format("%s/location", deviceName);
+        config.clientId = String.format("%s-%s-%s", Build.MODEL, Build.MANUFACTURER, deviceName);
+        var topic = String.format("mqttsensors/%s/location", deviceName);
         publisher.connect(config, topic);
         publisher.isConnected().subscribe(connected -> connectedObservable.onNext(connected));
     }

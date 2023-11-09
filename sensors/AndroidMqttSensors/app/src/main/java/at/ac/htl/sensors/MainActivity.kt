@@ -64,13 +64,12 @@ fun LocationView(viewModel: LocationViewModel) {
     var connected: State<Boolean> = store.map { it.isMqttConnected }.subscribeAsState(initial = false)
     val locationData: State<Model.LocationData> = store.map { it.locationData }.subscribeAsState(Model.LocationData())
     val txt = if (locationData.value.valid) "(${locationData.value.latitude}, ${locationData.value.longitude})" else "..."
-    var connectionId = R.drawable.disconnected
     var color = Color.Red
+    var connIconId = R.drawable.connected
     if (connected.value) {
         color = Color.Transparent
-        connectionId = R.drawable.connected
+        connIconId = R.drawable.disconnected
     }
-    val connIconId = if (connected.value) R.drawable.connected else R.drawable.disconnected
     val padding = 16.dp
     Column(
         Modifier
