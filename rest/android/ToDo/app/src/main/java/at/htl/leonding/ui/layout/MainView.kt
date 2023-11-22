@@ -1,4 +1,4 @@
-package at.htl.leonding
+package at.htl.leonding.ui.layout
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -22,7 +22,6 @@ fun fillMainViewContent(view: ComposeView) {
         }
     }
 }
-
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
