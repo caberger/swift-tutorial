@@ -45,6 +45,10 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/INDEX.LIST"
+            excludes += "META-INF/DEPENDENCIES"
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/NOTICE.md"
         }
     }
 }
@@ -72,4 +76,7 @@ dependencies {
     implementation("io.reactivex.rxjava3:rxjava:3.1.8")
     implementation("androidx.compose.runtime:runtime-rxjava3:1.5.2")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
+
+    //implementation("org.jboss.resteasy:resteasy-client:6.2.6.Final")
+    //compileOnly("javax.servlet:javax.servlet-api:4.0.1")
 }
