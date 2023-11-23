@@ -27,7 +27,7 @@ fun MainViewSurface(viewModel: ToDoModel) {
 fun ToDos(model: ToDoModel) {
     LazyColumn {
         items(model.toDos.size) { index ->
-            ToDoRow(toDo = model.toDos.get(index))
+            ToDoRow(toDo = model.toDos[index])
             Divider()
         }
     }
