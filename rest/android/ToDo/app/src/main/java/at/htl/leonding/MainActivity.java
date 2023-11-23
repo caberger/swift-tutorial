@@ -25,7 +25,4 @@ public class MainActivity extends ComponentActivity {
         var service = new ToDoService(viewModel.getStore());
         service.loadAll();
     }
-    void updateTodos(ToDo[] toDos) {
-        Log.d(TAG, "todos loaded " + toDos.length);
-    }
 }
