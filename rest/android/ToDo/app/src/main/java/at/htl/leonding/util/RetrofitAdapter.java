@@ -1,7 +1,7 @@
 package at.htl.leonding.util;
 
 import android.util.Log;
-/*
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,4 +32,3 @@ public class RetrofitAdapter<T> {
         enqueue(call, callback, (cll, t) -> Log.e(TAG, "failed to execute request", t));
     }
 }
-*/

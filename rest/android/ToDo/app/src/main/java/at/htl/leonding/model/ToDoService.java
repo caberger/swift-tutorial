@@ -1,7 +1,8 @@
 package at.htl.leonding.model;
 
-import android.util.Log;
+import java.util.List;
 
+import at.htl.leonding.util.RetrofitAdapter;
 import io.reactivex.rxjava3.subjects.Subject;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -19,20 +20,7 @@ public class ToDoService {
                 .build();
         api = retrofit.create(ToDoClient.class);
     }
-    public ToDo[] all() {
-
-        ToDo[] todos = new ToDo[0];
-        /*
-        try (var client = createClient()) {
-            var path = UriBuilder.fromPath("https://jsonplaceholder.typicode.com");
-            var target = client.target(path);
-            var proxy = target.proxy(ToDoService.class);
-            todos = proxy.all();
-        } catch(Exception e) {
-            Log.e(TAG, "failed to load", e);
-        }
-
-         */
-        return todos;
+    public void loadAll() {
+        new RetrofitAdapter<ToDo[]>().enqueue(api.getAll(), todos -> store.onNext(new ToDoModel(List.of(todos))));
     }
 }
