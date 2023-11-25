@@ -1,5 +1,7 @@
 package at.htl.leonding.model;
 
+import java.util.List;
+
 import javax.inject.Singleton;
 
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
@@ -8,4 +10,7 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
 public record Store(
         BehaviorSubject<ToDoModel> toDoModel
 ) {
+    public void next(ToDo[] todos) {
+        toDoModel.onNext(new ToDoModel(List.of(todos)));
+    }
 }

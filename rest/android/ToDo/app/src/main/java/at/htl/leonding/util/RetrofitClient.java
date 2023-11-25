@@ -6,8 +6,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RetrofitAdapter<T> {
-    private static final String TAG = RetrofitAdapter.class.getName();
+public class RetrofitClient {
+    private static final String TAG = RetrofitClient.class.getName();
 
     public interface RetrofitAdapterCallback<T> {
         void done(T t);
@@ -15,7 +15,7 @@ public class RetrofitAdapter<T> {
     public interface RetrofitErrorCallback<T> {
         void report(Call<T> call, Throwable t);
     }
-    public void enqueue(Call<T> call, RetrofitAdapterCallback<T> callback, RetrofitErrorCallback<T> error) {
+    public static <T> void call(Call<T> call, RetrofitAdapterCallback<T> callback, RetrofitErrorCallback<T> error) {
         call.enqueue(new Callback<T>() {
             @Override
             public void onResponse(Call<T> call, Response<T> response) {
@@ -28,7 +28,7 @@ public class RetrofitAdapter<T> {
             }
         });
     }
-    public void enqueue(Call<T> call, RetrofitAdapterCallback<T> callback) {
-        enqueue(call, callback, (cll, t) -> Log.e(TAG, "failed to execute request", t));
+    public static <T> void call(Call<T> call, RetrofitAdapterCallback<T> callback) {
+        call(call, callback, (cll, t) -> Log.e(TAG, "failed to execute request", t));
     }
 }
