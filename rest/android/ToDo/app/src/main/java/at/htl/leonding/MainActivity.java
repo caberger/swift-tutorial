@@ -1,28 +1,30 @@
 package at.htl.leonding;
 
 import android.os.Bundle;
-import android.util.Log;
+
+import javax.annotation.CheckForNull;
+import javax.inject.Inject;
 
 import androidx.activity.ComponentActivity;
 import androidx.compose.ui.platform.ComposeView;
-import androidx.lifecycle.ViewModelProvider;
-import at.htl.leonding.model.ToDo;
+import at.htl.leonding.model.Store;
 import at.htl.leonding.model.ToDoService;
-import at.htl.leonding.model.ToDoViewModel;
 import at.htl.leonding.ui.bridge.BridgeKt;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class MainActivity extends ComponentActivity {
+    @Inject
+    Store store;
+    @Inject
+    ToDoService toDoService;
 
-    private static final String TAG = MainActivity.class.getName();
-
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(@CheckForNull Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        var view = new ComposeView(this);
-        var viewModel = new ViewModelProvider(this).get(ToDoViewModel.class);
-        BridgeKt.fillMainViewContent(view, viewModel);
+        final var view = new ComposeView(this);
+        BridgeKt.fillMainViewContent(view, store);
         setContentView(view);
-        var service = new ToDoService(viewModel.getStore());
-        service.loadAll();
+        toDoService.loadAll();
     }
 }

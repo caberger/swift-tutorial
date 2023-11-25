@@ -1,6 +1,9 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -9,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "at.htl.leonding"
-        minSdk = 24
+        minSdk = 28
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -49,6 +52,7 @@ android {
             excludes += "META-INF/DEPENDENCIES"
             excludes += "META-INF/LICENSE.md"
             excludes += "META-INF/NOTICE.md"
+            excludes += "META-INF/DEPENDENCIES.txt"
         }
     }
 }
@@ -77,6 +81,9 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-rxjava3:1.5.2")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
 
-    //implementation("org.jboss.resteasy:resteasy-client:6.2.6.Final")
-    //compileOnly("javax.servlet:javax.servlet-api:4.0.1")
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+}
+kapt {
+    correctErrorTypes = true
 }

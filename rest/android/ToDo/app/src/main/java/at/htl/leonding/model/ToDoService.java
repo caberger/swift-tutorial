@@ -2,25 +2,32 @@ package at.htl.leonding.model;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import at.htl.leonding.Configuration;
 import at.htl.leonding.util.RetrofitAdapter;
-import io.reactivex.rxjava3.subjects.Subject;
+import retrofit2.Retrofit.Builder;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+@Singleton
 public class ToDoService {
-    public static final String BASE_URL = "https://jsonplaceholder.typicode.com";
-    private static final String TAG = ToDoService.class.getName();
     final private ToDoClient api;
-    final private Subject<ToDoModel> store;
+    final private Store store;
+    final Configuration configuration;
 
-    public ToDoService(Subject<ToDoModel> store) {
+    @Inject
+    public ToDoService(Configuration configuration, Store store) {
         this.store = store;
-        var retrofit = new retrofit2.Retrofit.Builder()
-                .baseUrl(BASE_URL)
+        this.configuration = configuration;
+        var retrofit = new Builder()
+                .baseUrl(configuration.baseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(ToDoClient.class);
     }
     public void loadAll() {
-        new RetrofitAdapter<ToDo[]>().enqueue(api.getAll(), todos -> store.onNext(new ToDoModel(List.of(todos))));
+        var adapter = new RetrofitAdapter<ToDo[]>();
+        adapter.enqueue(api.getAll(), todos -> store.toDoModel().onNext(new ToDoModel(List.of(todos))));
     }
 }
