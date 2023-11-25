@@ -15,7 +15,7 @@ public class RetrofitAdapter<T> {
     public interface RetrofitErrorCallback<T> {
         void report(Call<T> call, Throwable t);
     }
-    public void enqueue(Call<T> call, RetrofitAdapterCallback<T> callback, RetrofitErrorCallback error) {
+    public void enqueue(Call<T> call, RetrofitAdapterCallback<T> callback, RetrofitErrorCallback<T> error) {
         call.enqueue(new Callback<T>() {
             @Override
             public void onResponse(Call<T> call, Response<T> response) {
