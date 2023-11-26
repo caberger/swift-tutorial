@@ -4,24 +4,19 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import at.htl.leonding.Configuration;
-import at.htl.leonding.util.RetrofitClient;
-import retrofit2.Retrofit.Builder;
-import retrofit2.converter.gson.GsonConverterFactory;
+import at.htl.leonding.util.retrofit.RetrofitBuilder;
+import at.htl.leonding.util.retrofit.RetrofitClient;
 
 @Singleton
 public class ToDoService {
     final private ToDoApi api;
     final private Store store;
-    final Configuration configuration;
 
     @Inject
-    public ToDoService(Configuration configuration, Store store) {
+    public ToDoService(Configuration configuration, Store store, RetrofitBuilder builder) {
         this.store = store;
-        this.configuration = configuration;
-        var retrofit = new Builder()
-                .baseUrl(configuration.baseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+
+        var retrofit = builder.build(configuration.baseUrl());
         api = retrofit.create(ToDoApi.class);
     }
     public void loadAll() {

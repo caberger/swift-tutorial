@@ -1,9 +1,7 @@
 package at.htl.leonding.model;
 
 import java.util.List;
-
 import javax.inject.Singleton;
-
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
 @Singleton

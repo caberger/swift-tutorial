@@ -2,13 +2,12 @@ package at.htl.leonding;
 
 import android.os.Bundle;
 
-import javax.annotation.CheckForNull;
 import javax.inject.Inject;
-import dagger.hilt.android.AndroidEntryPoint;
 
 import androidx.activity.ComponentActivity;
 import at.htl.leonding.model.ToDoService;
 import at.htl.leonding.ui.layout.MainView;
+import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class MainActivity extends ComponentActivity {
@@ -18,7 +17,7 @@ public class MainActivity extends ComponentActivity {
     MainView mainView;
 
     @Override
-    public void onCreate(@CheckForNull Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainView.setContentOfActivity(this);
         toDoService.loadAll();

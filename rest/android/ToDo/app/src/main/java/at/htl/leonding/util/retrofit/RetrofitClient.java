@@ -1,4 +1,4 @@
-package at.htl.leonding.util;
+package at.htl.leonding.util.retrofit;
 
 import android.util.Log;
 

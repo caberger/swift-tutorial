@@ -63,7 +63,7 @@ fun ToDoRow(toDo: ToDo) {
 fun ToDoPreview() {
     var model = ToDoModel(listOf(
         ToDo(1, 1, "First Todo", false),
-        ToDo(2, 2, "NextTodo", true)
+        ToDo(2, 2, "Second Todo", true)
     ))
     ToDoTheme {
         ToDos(model)
