@@ -1,7 +1,7 @@
 import Foundation
 
 class ViewModel: ObservableObject {
-    private(set) var model: AddressModel
+    @Published private(set) var model: AddressModel
     
     init(model: AddressModel) {
         self.model = model
@@ -27,7 +27,10 @@ class ViewModel: ObservableObject {
         houseNumber: String? = nil,
         zipCode: String?  = nil,
         city: String? = nil
-    ) -> Bool {
+    ) {
         model.dataChanged(firstName: firstName, lastName: lastName, street: street, houseNumber: houseNumber, zipCode: zipCode, city: city)
+    }
+    var isValid: Bool {
+        model.isValid
     }
 }
