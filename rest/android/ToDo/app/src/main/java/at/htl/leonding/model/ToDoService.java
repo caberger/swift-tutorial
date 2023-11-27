@@ -7,7 +7,7 @@ import at.htl.leonding.Configuration;
 import at.htl.leonding.util.retrofit.RetrofitBuilder;
 import at.htl.leonding.util.retrofit.RetrofitClient;
 
-/** Service to call the REST api */
+/** Service to call the <a href="https://jsonplaceholder.typicode.com/todos">ToDo REST api</a>  */
 @Singleton
 public class ToDoService {
     final private ToDoApi api;

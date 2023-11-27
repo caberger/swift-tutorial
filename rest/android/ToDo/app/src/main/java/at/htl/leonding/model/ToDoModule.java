@@ -10,12 +10,10 @@ import dagger.hilt.InstallIn;
 import dagger.hilt.components.SingletonComponent;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
-/** Dagger Module to provide classes that need initialization work */
+/** <a href="https://en.wikipedia.org/wiki/Dependency_injection">Dependency Injection</a> Module to provide those classes that need some initialization work. */
 @Module
 @InstallIn(SingletonComponent.class)
 public class ToDoModule {
-    private static final String TAG = ToDoModule.class.getName();
-
     @Provides
     @Singleton
     public Configuration provideConfiguration() {
@@ -23,7 +21,7 @@ public class ToDoModule {
     }
     @Provides
     @Singleton
-    public static Store provideStore() {
+    public Store provideStore() {
         return new Store(BehaviorSubject.createDefault(new ToDoModel()));
     }
 }
