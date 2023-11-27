@@ -87,3 +87,10 @@ dependencies {
 kapt {
     correctErrorTypes = true
 }
+tasks.register("dump") {
+    doLast {
+        val v = project.android.applicationVariants
+        var release = v.filter{it.buildType.name == "release"}.first()
+        release.compileConfiguration.forEach {file -> println(file.absoluteFile)}
+    }
+}
