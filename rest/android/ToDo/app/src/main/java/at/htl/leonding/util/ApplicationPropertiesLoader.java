@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import at.htl.leonding.Configuration;
 
+/** Loader for the properties stored in src/main/resources/application.properties */
 public class ApplicationPropertiesLoader {
     private static final String TAG = ApplicationPropertiesLoader.class.getName();
 

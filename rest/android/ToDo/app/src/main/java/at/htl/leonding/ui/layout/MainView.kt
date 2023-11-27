@@ -20,6 +20,10 @@ import at.htl.leonding.ui.theme.ToDoTheme
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/** Our View implemented in kotlin.
+ * Application Logic is separated from this view.
+ * Our State is delivered exclusively from our {@link Store}, which we subscribe here.
+ */
 @Singleton
 class MainView {
     @Inject

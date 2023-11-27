@@ -6,6 +6,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/** Helper class to call Retrofit with more elegance. */
 public class RetrofitClient {
     private static final String TAG = RetrofitClient.class.getName();
 

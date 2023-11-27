@@ -87,10 +87,21 @@ dependencies {
 kapt {
     correctErrorTypes = true
 }
-tasks.register("dump") {
+
+/** JavaDoc helper.
+ * This tasks writes the the class-path to a file that can be used with javadoc
+ * javadoc ... @javadoc.txt
+ */
+tasks.register("javadoc-params") {
     doLast {
-        val v = project.android.applicationVariants
-        var release = v.filter{it.buildType.name == "release"}.first()
-        release.compileConfiguration.forEach {file -> println(file.absoluteFile)}
+        val variant = project.android.applicationVariants
+        val release = variant.filter{ it.buildType.name == "release" }.first()
+        val outputFile = project.layout.buildDirectory.file("javadoc.txt").get().asFile
+        outputFile.printWriter().use { out ->
+            val classpath = release.compileConfiguration.joinToString(separator=":") { it.toString() }
+            out.println("--class-path " + classpath)
+            out.println()
+        }
+        println("javadoc options written to " + outputFile.absolutePath)
     }
 }

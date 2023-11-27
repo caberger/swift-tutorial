@@ -10,6 +10,7 @@ import dagger.hilt.InstallIn;
 import dagger.hilt.components.SingletonComponent;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
+/** Dagger Module to provide classes that need initialization work */
 @Module
 @InstallIn(SingletonComponent.class)
 public class ToDoModule {

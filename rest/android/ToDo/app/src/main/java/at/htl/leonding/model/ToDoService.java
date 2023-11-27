@@ -7,6 +7,7 @@ import at.htl.leonding.Configuration;
 import at.htl.leonding.util.retrofit.RetrofitBuilder;
 import at.htl.leonding.util.retrofit.RetrofitClient;
 
+/** Service to call the REST api */
 @Singleton
 public class ToDoService {
     final private ToDoApi api;

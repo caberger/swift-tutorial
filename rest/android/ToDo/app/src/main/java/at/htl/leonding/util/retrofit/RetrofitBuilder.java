@@ -6,6 +6,7 @@ import javax.inject.Singleton;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/** Build helper for Retrofit */
 @Singleton
 public class RetrofitBuilder {
     @Inject

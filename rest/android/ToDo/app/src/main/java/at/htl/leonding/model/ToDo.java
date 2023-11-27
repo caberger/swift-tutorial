@@ -1,5 +1,7 @@
 package at.htl.leonding.model;
 
+/** A ToDo as we get it from <a href="https://jsonplaceholder.typicode.com/todos">jsonplaceholder.typicode.com</a>
+*/
 public record ToDo(
         int userId,
         int id,
