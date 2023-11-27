@@ -9,14 +9,18 @@ struct TwoFieldsWithLabels {
     var widthOfSecondField: CGFloat?
     var secondLabel = ""
     var secondFieldValue = ""
+    
 }
 struct TwoFieldsWithLabelsView: View {
     var isEditing: Bool
-    @State var twoFields = TwoFieldsWithLabels()
+    var twoFields = TwoFieldsWithLabels()
+    var textsChanged: (String?, String?) -> Void
     var body: some View {
         HStack {
             if isEditing {
-                EditingTwoFieldsView(twoFields: twoFields)
+                EditingTwoFieldsView(twoFields: twoFields, cb: { first, second in
+                    textsChanged(first, second)
+                })
             } else {
                 DisplayingTwoFieldsView(streetAndNumber: twoFields)
                 }
@@ -25,16 +29,33 @@ struct TwoFieldsWithLabelsView: View {
 }
 
 struct EditingTwoFieldsView : View {
-    @State var twoFields = TwoFieldsWithLabels()
+    var twoFields = TwoFieldsWithLabels()
+    var cb: (String?, String?) -> Void
     var body: some View {
-        TextField(text: $twoFields.firstFieldValue) {
-            Text(twoFields.firstLabel)
-        }
+        TextField(twoFields.firstLabel, text: Binding(
+            get: {
+                twoFields.firstFieldValue
+            },
+            set: {
+                if $0 != twoFields.firstFieldValue {
+                    cb($0, nil)
+                }
+            }
+        )
+        )
         .border(/*@START_MENU_TOKEN@*/Color.gray/*@END_MENU_TOKEN@*/, width: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/)
         .frame(width: twoFields.widthOfFirstField != nil ? twoFields.widthOfFirstField : nil)
-        TextField(text: $twoFields.secondFieldValue) {
-            Text(twoFields.secondLabel)
-        }
+        TextField(twoFields.secondLabel, text: Binding(
+            get: {
+                twoFields.secondFieldValue
+            },
+            set: {
+                if $0 != twoFields.secondFieldValue {
+                    cb(nil, $0)
+                }
+                    
+            }
+        ))
         .border(/*@START_MENU_TOKEN@*/Color.gray/*@END_MENU_TOKEN@*/, width: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/)
         .frame(width: twoFields.widthOfSecondField != nil ? twoFields.widthOfSecondField : nil)
     }
@@ -56,15 +77,20 @@ struct DisplayingStreetAndHouseNumberView_Previews: PreviewProvider {
     @State static var streetAndNumber = TwoFieldsWithLabels(firstLabel: "Street", firstFieldValue: "Loop", secondLabel: "No.", secondFieldValue: "1")
    
     static var previews: some View {
-        TwoFieldsWithLabelsView(isEditing: false, twoFields: streetAndNumber)
-            .padding()
+        TwoFieldsWithLabelsView(isEditing: false, twoFields: streetAndNumber, textsChanged:  { street, no in
+            print("street and no chnaged")
+            
+        })
+        .padding()
     }
 }
 struct EditingStreetAndHouseNumberView_Previews: PreviewProvider {
     @State static var streetAndNumber = TwoFieldsWithLabels(widthOfFirstField: nil, firstLabel: "Street", firstFieldValue: "Loop", widthOfSecondField: 48, secondLabel: "No.", secondFieldValue: "1")
 
     static var previews: some View {
-        TwoFieldsWithLabelsView(isEditing: true, twoFields: streetAndNumber)
-            .padding()
+        TwoFieldsWithLabelsView(isEditing: true, twoFields: streetAndNumber, textsChanged:  { street, no in
+            print("street + no changed")
+        })
+        .padding()
     }
 }

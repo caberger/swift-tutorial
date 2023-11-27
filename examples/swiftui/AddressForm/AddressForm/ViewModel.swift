@@ -1,7 +1,7 @@
 import Foundation
 
 class ViewModel: ObservableObject {
-    private var model: AddressModel
+    private(set) var model: AddressModel
     
     init(model: AddressModel) {
         self.model = model
@@ -9,9 +9,6 @@ class ViewModel: ObservableObject {
     var firstName: String {
         get {
             model.firstName
-        }
-        set {
-            print("setting first name \(newValue)")
         }
     }
     var lastName: String {
@@ -22,5 +19,15 @@ class ViewModel: ObservableObject {
     }
     var zipAndCity: TwoFieldsWithLabels {
         TwoFieldsWithLabels(widthOfFirstField: 80, firstLabel: "zip", firstFieldValue: model.zipCode, widthOfSecondField: nil, secondLabel: "city", secondFieldValue: model.city)
+    }
+    func dataChanged(
+        firstName: String? = nil,
+        lastName: String? = nil,
+        street: String? = nil,
+        houseNumber: String? = nil,
+        zipCode: String?  = nil,
+        city: String? = nil
+    ) -> Bool {
+        model.dataChanged(firstName: firstName, lastName: lastName, street: street, houseNumber: houseNumber, zipCode: zipCode, city: city)
     }
 }
