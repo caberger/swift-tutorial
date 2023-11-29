@@ -5,11 +5,13 @@ struct AddressFormView: View {
     @ObservedObject var viewModel : ViewModel
     var body: some View {
         VStack {
+            Text(isEditing ? "Address" : "Summary")
+                .font(.title)
+                .fontWeight(.bold)
             Form {
-                let firstNameField = AddressFormLine(isEditing: isEditing, label: "First Name", text: viewModel.firstName) {
+                AddressFormLine(isEditing: isEditing, label: "First Name", text: viewModel.firstName) {
                     viewModel.dataChanged(firstName: $0)
                 }
-                firstNameField
                 AddressFormLine(isEditing: isEditing, label: "Last Name", text: viewModel.lastName) {
                     viewModel.dataChanged(lastName: $0)
                 }
