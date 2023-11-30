@@ -83,6 +83,9 @@ dependencies {
 
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
+
+    implementation("org.eclipse.microprofile.config:microprofile-config-api:3.1") // for application.properties config loader
+
 }
 kapt {
     correctErrorTypes = true
