@@ -8,8 +8,6 @@ import org.eclipse.microprofile.config.spi.ConfigSource;
 import java.util.Properties;
 import java.util.Set;
 
-import at.htl.leonding.Configuration;
-
 public class ApplicationPropertiesConfigSource implements ConfigSource {
     private static final String TAG = ApplicationPropertiesConfigSource.class.getName();
     private final String resourceName;
@@ -34,6 +32,12 @@ public class ApplicationPropertiesConfigSource implements ConfigSource {
     public Set<String> getPropertyNames() {
         return null;
     }
+
+    @Override
+    public int getOrdinal() {
+        return ordinal;
+    }
+
     @Override
     public String getValue(String propertyName) {
         return null;
