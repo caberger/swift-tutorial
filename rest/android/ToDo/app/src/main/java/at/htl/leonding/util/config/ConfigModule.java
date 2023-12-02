@@ -40,7 +40,7 @@ public class ConfigModule {
                     .keySet()
                     .stream()
                     .collect(Collectors.toList());
-            keys.sort((l, r) -> r - l);
+            keys.sort((l, r) -> l - r);
             var configSortedByPriority = keys.stream().map(key -> sources.get(key)).collect(Collectors.toList());
             config = new MergedConfig(configSortedByPriority);
         }
@@ -49,45 +49,45 @@ public class ConfigModule {
 }
 class MergedConfig implements Config {
     Map<String, String> properties = new HashMap<>();
+    final List<ConfigSource> configSources;
 
     MergedConfig(List<ConfigSource> configSourcesSortedByPriority) {
-        //configSourcesSortedByPriority.forEach(config -> properties.putAll(config.getProperties()));
+        this.configSources = configSourcesSortedByPriority;
         configSourcesSortedByPriority.forEach(config -> {
-            var properties = config.getProperties();
-            properties.putAll(properties);
+            var names = config.getPropertyNames();
+            names.forEach(name -> {
+                var value = config.getValue(name);
+                properties.put(name, value);
+            });
         });
 
     }
+    // other classes should specialze T... to be done?
     @Override
     public <T> T getValue(String propertyName, Class<T> propertyType) {
-        return null;
+        return (T)properties.get(propertyName);
     }
-
     @Override
     public ConfigValue getConfigValue(String propertyName) {
+        //var value = new ConfigValue();
         return null;
     }
-
     @Override
     public <T> Optional<T> getOptionalValue(String propertyName, Class<T> propertyType) {
-        return Optional.empty();
+        return Optional.ofNullable(getValue(propertyName, propertyType));
     }
-
     @Override
     public Iterable<String> getPropertyNames() {
-        return null;
+        return properties.keySet().stream().collect(Collectors.toList());
     }
-
     @Override
     public Iterable<ConfigSource> getConfigSources() {
-        return null;
+        return configSources;
     }
-
     @Override
     public <T> Optional<Converter<T>> getConverter(Class<T> forType) {
         return Optional.empty();
     }
-
     @Override
     public <T> T unwrap(Class<T> type) {
         return null;
