@@ -1,4 +1,4 @@
-package at.ac.htl;
+package at.ac.htl.feature.main;
 
 import android.os.Bundle;
 

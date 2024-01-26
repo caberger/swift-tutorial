@@ -12,5 +12,6 @@ public class Store extends GenericStore<Model> {
     public Store(ObjectMapperFactory objectMapperFactory, InitialState initialState) {
         super(objectMapperFactory, initialState, Model.class);
     }
+
 }
 

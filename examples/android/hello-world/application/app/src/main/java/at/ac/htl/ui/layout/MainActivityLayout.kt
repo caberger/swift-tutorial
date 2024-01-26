@@ -1,5 +1,6 @@
 package at.ac.htl.ui.layout
 
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -14,21 +15,24 @@ import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import at.ac.htl.DetailActivity
+import at.ac.htl.feature.main.MainViewModel
 import at.ac.htl.model.InitialState
+import at.ac.htl.model.ObdModel
 import at.ac.htl.model.Store
 import at.ac.htl.ui.theme.MyFirstAppTheme
 import at.ac.htl.util.ObjectMapperFactory
 import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 
+private val TAG = MainActivityLayout::class.java.canonicalName
 @ActivityScoped
 class MainActivityLayout {
     @Inject
-    lateinit var store: Store
+    lateinit var viewModel: MainViewModel
 
     @Inject
-    constructor(store: Store) {
-        this.store = store
+    constructor(viewModel: MainViewModel) {
+        this.viewModel = viewModel
     }
     fun setContentViewFor(activity: ComponentActivity) {
         activity.setContent {
@@ -37,27 +41,27 @@ class MainActivityLayout {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting(store)
+                    Greeting(viewModel)
                 }
             }
         }
     }
 }
 @Composable
-fun Greeting(store: Store, modifier: Modifier = Modifier) {
-    val state = store.subject.subscribeAsState(initial = InitialState())
+fun Greeting(viewModel: MainViewModel, modifier: Modifier = Modifier) {
+    val state = viewModel.observable
+        .doOnError { Log.e(TAG, it.message!! )}
+        .subscribeAsState(initial = ObdModel()).value
     Column {
         Text(
-            text = state.value.greeting,
+            text = state.rpm.toString(),
             modifier = modifier
         )
-        TextField(value = state.value.greeting, onValueChange = {
-            store.produce{ text -> text.greeting = it }
-        })
         Button(onClick = {
-            store.produce { it.activity = DetailActivity::class.java }
+            viewModel.setRpm(state.rpm + 10)
+            viewModel.routeTo(DetailActivity::class.java)
         }) {
-            Text("Detail...")
+        Text("Detail...")
         }
     }
 }
@@ -69,6 +73,6 @@ fun GreetingPreview() {
     model.greeting = "hello world"
     val store = Store(ObjectMapperFactory(), model)
     MyFirstAppTheme {
-        Greeting(store)
+        //Greeting(store)
     }
 }
