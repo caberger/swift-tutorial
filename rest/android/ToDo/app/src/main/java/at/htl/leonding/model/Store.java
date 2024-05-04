@@ -9,13 +9,11 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
 /** This is our Storage area for <a href="https://redux.js.org/understanding/thinking-in-redux/three-principles">single source of truth</a> {@link Model}. */
 @Singleton
 public class Store {
-    public final BehaviorSubject<Model> model;
-    public final Immer<Model> immer;
+    public final BehaviorSubject<Model> model = BehaviorSubject.createDefault(new Model());
+    public final Immer<Model> immer = new Immer<>(Model.class);
 
     @Inject
     Store() {
-        model = BehaviorSubject.createDefault(new Model());
-        immer = new Immer<>(Model.class);
     }
     public void set(ToDo[] toDos) {
         model.onNext(immer.produce(model.getValue(), model -> model.toDos = toDos));

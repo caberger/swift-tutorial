@@ -9,6 +9,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.io.IOException;
 
+/** A Mapper that maps types to their json representation and back.
+ * ... plus a convenient deep-clone function
+ * @param <T> the Class that is mapped
+ */
 public class Mapper<T> {
     private Class<? extends T> clazz;
     private ObjectMapper mapper;
@@ -36,7 +40,12 @@ public class Mapper<T> {
         }
         return model;
     }
-    public T clone(T model) {
-        return fromResource(toResource(model));
+    /** deep clone an object by converting it to its json representation and back.
+     *
+     * @param thing the thing to clone, unchanged
+     * @return the deeply cloned thing
+     */
+    public T clone(final T thing) {
+        return fromResource(toResource(thing));
     }
 }

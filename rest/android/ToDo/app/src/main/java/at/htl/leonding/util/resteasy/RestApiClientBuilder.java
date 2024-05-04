@@ -1,7 +1,6 @@
 package at.htl.leonding.util.resteasy;
 
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
-import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.jboss.resteasy.client.jaxrs.engines.URLConnectionClientEngineBuilder;
 import org.jboss.resteasy.client.jaxrs.internal.LocalResteasyProviderFactory;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
@@ -29,8 +28,8 @@ public class RestApiClientBuilder {
     public <T> T build(Class <? extends T> type, String url) {
         ResteasyProviderFactory.setRegisterBuiltinByDefault(false);
         var factory = ResteasyProviderFactory.getInstance();
-        factory.registerProvider(BodyReader.class, true);
-        factory.registerProvider(BodyWriter.class, true);
+        factory.registerProvider(JsonMessageBodyReader.class, true);
+        factory.registerProvider(JsonMessageBodyWriter.class, true);
         var builder = (ResteasyClientBuilder) ClientBuilder.newBuilder();
         builder.scheduledExecutorService(scheduledExecutorService);
         builder.executorService(executorService, false);

@@ -2,6 +2,9 @@ package at.htl.leonding.util.immer;
 
 import java.util.function.Consumer;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import at.htl.leonding.util.model.Mapper;
 
 /** Immer simplifies handling immutable data structures.
@@ -10,9 +13,11 @@ import at.htl.leonding.util.model.Mapper;
  *
  * @param <T> The type of the baseState
  */
+@Singleton
 public class Immer<T> {
     public final Mapper<T> mapper;
 
+    @Inject
     public Immer(Class<? extends T> type) {
         mapper = new Mapper<T>(type);
     }

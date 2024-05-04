@@ -12,7 +12,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.ext.MessageBodyWriter;
 
-public class BodyWriter<T> implements MessageBodyWriter<T>, JsonMediaTypeMatcher {
+public class JsonMessageBodyWriter<T> implements MessageBodyWriter<T>, JsonMediaTypeMatcher {
     ObjectMapper objectMapper = new ObjectMapper();
 
     @Override

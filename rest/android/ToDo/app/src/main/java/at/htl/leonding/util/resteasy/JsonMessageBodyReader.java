@@ -11,7 +11,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.ext.MessageBodyReader;
 
-public class BodyReader<T> implements MessageBodyReader<T>, JsonMediaTypeMatcher {
+public class JsonMessageBodyReader<T> implements MessageBodyReader<T>, JsonMediaTypeMatcher {
     ObjectMapper objectMapper = new ObjectMapper();
     @Override
     public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
