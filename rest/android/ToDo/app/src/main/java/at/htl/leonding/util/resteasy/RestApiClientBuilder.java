@@ -18,19 +18,20 @@ import jakarta.ws.rs.client.ClientBuilder;
 
 @Singleton
 public class RestApiClientBuilder {
-    ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
-    ExecutorService executorService = Executors.newSingleThreadExecutor();
+    final public ScheduledExecutorService scheduledExecutorService;
+    final public ExecutorService executorService;
 
     @Inject
     public RestApiClientBuilder() {
+        scheduledExecutorService = Executors.newScheduledThreadPool(1);
+        executorService = Executors.newSingleThreadExecutor();
     }
     public <T> T build(Class <? extends T> type, String url) {
         ResteasyProviderFactory.setRegisterBuiltinByDefault(false);
         var factory = ResteasyProviderFactory.getInstance();
         factory.registerProvider(BodyReader.class, true);
         factory.registerProvider(BodyWriter.class, true);
-        var builder = (ResteasyClientBuilder) ClientBuilder
-                .newBuilder();
+        var builder = (ResteasyClientBuilder) ClientBuilder.newBuilder();
         builder.scheduledExecutorService(scheduledExecutorService);
         builder.executorService(executorService, false);
         builder.readTimeout(10, TimeUnit.SECONDS);
@@ -38,9 +39,6 @@ public class RestApiClientBuilder {
         var httpEngine = new URLConnectionClientEngineBuilder().resteasyClientBuilder(builder).build();
         builder.httpEngine(httpEngine);
         var client = builder.build();
-
-        ResteasyWebTarget target = client.target(url);
-        var restClient = target.proxy(type);
-        return restClient;
+        return client.target(url).proxy(type);
     }
 }

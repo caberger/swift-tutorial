@@ -6,7 +6,7 @@ import javax.inject.Inject;
 
 import androidx.activity.ComponentActivity;
 import at.htl.leonding.model.Store;
-import at.htl.leonding.model.RestService;
+import at.htl.leonding.model.ToDoService;
 import at.htl.leonding.ui.layout.MainViewBuilder;
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -19,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class MainActivity extends ComponentActivity {
     public static final String TAG = MainActivity.class.getName();
     @Inject
-    RestService toDoService;
+    ToDoService toDoService;
     @Inject
     MainViewBuilder mainView;
 

@@ -10,7 +10,7 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
 @Singleton
 public class Store {
     public final BehaviorSubject<Model> model;
-    public Immer<Model> immer;
+    public final Immer<Model> immer;
 
     @Inject
     Store() {
@@ -18,7 +18,6 @@ public class Store {
         immer = new Immer<>(Model.class);
     }
     public void set(ToDo[] toDos) {
-        var nextState = immer.produce(model.getValue(), model -> model.toDos = toDos);
-        model.onNext(nextState);
+        model.onNext(immer.produce(model.getValue(), model -> model.toDos = toDos));
     }
 }
