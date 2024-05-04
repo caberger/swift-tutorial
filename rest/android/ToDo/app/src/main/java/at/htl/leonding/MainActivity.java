@@ -5,7 +5,6 @@ import android.os.Bundle;
 import javax.inject.Inject;
 
 import androidx.activity.ComponentActivity;
-import at.htl.leonding.model.Store;
 import at.htl.leonding.model.ToDoService;
 import at.htl.leonding.ui.layout.MainViewBuilder;
 import dagger.hilt.android.AndroidEntryPoint;

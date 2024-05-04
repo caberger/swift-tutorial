@@ -13,7 +13,7 @@ import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.tooling.preview.Preview
-import at.htl.leonding.model.Store
+import at.htl.leonding.model.ModelStore
 import at.htl.leonding.model.ToDo
 import at.htl.leonding.model.Model
 import at.htl.leonding.ui.theme.ToDoTheme
@@ -28,7 +28,7 @@ import javax.inject.Singleton
 @Singleton
 class MainViewBuilder {
     @Inject
-    lateinit var store: Store
+    lateinit var store: ModelStore
 
     @Inject
     constructor() {

@@ -16,16 +16,16 @@ import at.htl.leonding.util.retrofit.RetrofitClient;
 public class RetroFitToDoService {
     public static final String JSON_PLACEHOLDER_BASE_URL_SETTING = "json.placeholder.baseurl";
     final private RetrofitToDoClient api;
-    final private Store store;
+    final private ModelStore store;
 
     @Inject
-    public RetroFitToDoService(Config config, Store store, RetrofitBuilder builder) {
+    public RetroFitToDoService(Config config, ModelStore store, RetrofitBuilder builder) {
         this.store = store;
         var baseUrl = config.getValue(JSON_PLACEHOLDER_BASE_URL_SETTING, String.class);
         var retrofit = builder.build(baseUrl);
         api = retrofit.create(RetrofitToDoClient.class);
     }
     public void loadAll() {
-        RetrofitClient.call(api.all(), store::set);
+        RetrofitClient.call(api.all(), store::setTodos);
     }
 }
