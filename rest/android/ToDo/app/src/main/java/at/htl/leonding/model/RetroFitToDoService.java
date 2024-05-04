@@ -1,9 +1,10 @@
 package at.htl.leonding.model;
 
+import org.eclipse.microprofile.config.Config;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import at.htl.leonding.Configuration;
 import at.htl.leonding.util.retrofit.RetrofitBuilder;
 import at.htl.leonding.util.retrofit.RetrofitClient;
 
@@ -13,13 +14,14 @@ import at.htl.leonding.util.retrofit.RetrofitClient;
 @Deprecated
 @Singleton
 public class RetroFitToDoService {
+    public static final String JSON_PLACEHOLDER_BASE_URL_SETTING = "json.placeholder.baseurl";
     final private RetrofitToDoClient api;
     final private Store store;
 
     @Inject
-    public RetroFitToDoService(Configuration config, Store store, RetrofitBuilder builder) {
+    public RetroFitToDoService(Config config, Store store, RetrofitBuilder builder) {
         this.store = store;
-        var baseUrl = config.getBaseUrl();
+        var baseUrl = config.getValue(JSON_PLACEHOLDER_BASE_URL_SETTING, String.class);
         var retrofit = builder.build(baseUrl);
         api = retrofit.create(RetrofitToDoClient.class);
     }

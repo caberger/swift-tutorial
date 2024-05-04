@@ -23,9 +23,6 @@ public class MainActivity extends ComponentActivity {
     @Inject
     MainViewBuilder mainView;
 
-    @Inject
-    Store store;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
