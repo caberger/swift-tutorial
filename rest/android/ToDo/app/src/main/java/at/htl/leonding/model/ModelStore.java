@@ -10,7 +10,7 @@ import at.htl.leonding.util.store.Store;
 public class ModelStore extends Store<Model> {
     @Inject
     ModelStore() {
-        super(Model.class);
+        super(Model.class, new Model());
     }
     public void setTodos(ToDo[] toDos) {
         apply(model -> model.toDos = toDos);

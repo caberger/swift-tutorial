@@ -7,6 +7,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /** Build helper for Retrofit */
+@Deprecated
 @Singleton
 public class RetrofitBuilder {
     @Inject

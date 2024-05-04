@@ -7,19 +7,18 @@ import at.htl.leonding.util.immer.Immer;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
 public class Store<T> {
-    public final BehaviorSubject<T> model;
+    public final BehaviorSubject<T> pipe;
     public final Immer<T> immer;
 
-    protected Store(Class<? extends T> type) {
+    protected Store(Class<? extends T> type, T initialState) {
         try {
-            var instance = type.newInstance();
-            model = BehaviorSubject.createDefault(instance);
-            immer = new Immer<>(type);
+            pipe = BehaviorSubject.createDefault(initialState);
+            immer = new Immer<T>(type);
         } catch (Exception e) {
             throw new CompletionException(e);
         }
     }
     public void apply(Consumer<T> recipe) {
-        model.onNext(immer.produce(model.getValue(), recipe));
+        pipe.onNext(immer.produce(pipe.getValue(), recipe));
     }
 }
