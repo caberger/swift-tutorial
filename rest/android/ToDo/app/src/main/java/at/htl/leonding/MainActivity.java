@@ -2,13 +2,12 @@ package at.htl.leonding;
 
 import android.os.Bundle;
 
-import org.eclipse.microprofile.config.Config;
-
 import javax.inject.Inject;
 
 import androidx.activity.ComponentActivity;
-import at.htl.leonding.model.ToDoService;
-import at.htl.leonding.ui.layout.MainView;
+import at.htl.leonding.model.Store;
+import at.htl.leonding.model.RestService;
+import at.htl.leonding.ui.layout.MainViewBuilder;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /** Our main activity implemented in java.
@@ -18,18 +17,20 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class MainActivity extends ComponentActivity {
+    public static final String TAG = MainActivity.class.getName();
     @Inject
-    ToDoService toDoService;
+    RestService toDoService;
     @Inject
-    MainView mainView;
+    MainViewBuilder mainView;
 
     @Inject
-    Config configuration;
+    Store store;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainView.setContentOfActivity(this);
-        toDoService.loadAll();
+
+        toDoService.getAll();
     }
 }

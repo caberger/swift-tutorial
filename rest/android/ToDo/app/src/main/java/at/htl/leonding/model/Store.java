@@ -1,24 +1,24 @@
 package at.htl.leonding.model;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import at.htl.leonding.util.immer.Immer;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
-/** This is our Storage area for <a href="https://redux.js.org/understanding/thinking-in-redux/three-principles">single source of truth</a> {@link ToDoModel}. */
+/** This is our Storage area for <a href="https://redux.js.org/understanding/thinking-in-redux/three-principles">single source of truth</a> {@link Model}. */
 @Singleton
 public class Store {
-    private final BehaviorSubject<ToDoModel> toDoModel;
+    public final BehaviorSubject<Model> model;
+    public Immer<Model> immer;
+
     @Inject
     Store() {
-        toDoModel = BehaviorSubject.createDefault(new ToDoModel());
+        model = BehaviorSubject.createDefault(new Model());
+        immer = new Immer<>(Model.class);
     }
-    public void next(ToDo[] todos) {
-        toDoModel.onNext(new ToDoModel(List.of(todos)));
-    }
-
-    public BehaviorSubject<ToDoModel> getToDoModel() {
-        return toDoModel;
+    public void set(ToDo[] toDos) {
+        var nextState = immer.produce(model.getValue(), model -> model.toDos = toDos);
+        model.onNext(nextState);
     }
 }

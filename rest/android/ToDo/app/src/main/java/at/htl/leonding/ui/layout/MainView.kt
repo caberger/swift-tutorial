@@ -15,8 +15,9 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.tooling.preview.Preview
 import at.htl.leonding.model.Store
 import at.htl.leonding.model.ToDo
-import at.htl.leonding.model.ToDoModel
+import at.htl.leonding.model.Model
 import at.htl.leonding.ui.theme.ToDoTheme
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -25,7 +26,7 @@ import javax.inject.Singleton
  * Our State is delivered exclusively from our {@link Store}, which we subscribe here.
  */
 @Singleton
-class MainView {
+class MainViewBuilder {
     @Inject
     lateinit var store: Store
 
@@ -35,7 +36,7 @@ class MainView {
     fun setContentOfActivity(activity: ComponentActivity) {
         val view = ComposeView(activity)
         view.setContent {
-            val viewModel = store.toDoModel.subscribeAsState(initial = ToDoModel()).value
+            val viewModel = store.model.observeOn(AndroidSchedulers.mainThread()).subscribeAsState(initial = Model()).value
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
@@ -47,10 +48,11 @@ class MainView {
     }
 }
 @Composable
-fun ToDos(model: ToDoModel) {
+fun ToDos(model: Model) {
+    val todos = model.toDos
     LazyColumn {
-        items(model.toDos.size) { index ->
-            ToDoRow(toDo = model.toDos[index])
+        items(todos.size) { index ->
+            ToDoRow(toDo = todos[index])
             Divider()
         }
     }
@@ -65,10 +67,16 @@ fun ToDoRow(toDo: ToDo) {
 @Preview(showBackground = true)
 @Composable
 fun ToDoPreview() {
-    var model = ToDoModel(listOf(
+    val model = Model()
+/*
+    val toDos = listOf(
         ToDo(1, 1, "First Todo", false),
         ToDo(2, 2, "Second Todo", true)
-    ))
+    )
+ */
+    val todo = ToDo();
+    todo.title = "First Todo"
+    model.toDos = arrayOf(todo)
     ToDoTheme {
         ToDos(model)
     }

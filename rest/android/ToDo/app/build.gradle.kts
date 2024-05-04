@@ -79,11 +79,14 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("io.reactivex.rxjava3:rxjava:3.1.8")
     implementation("androidx.compose.runtime:runtime-rxjava3:1.5.2")
+    implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
+
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
 
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
-
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.3")
+    implementation("org.jboss.resteasy:resteasy-client:6.2.8.Final")
     //implementation("org.eclipse.microprofile.config:microprofile-config-api:3.1") // for application.properties config loader
     implementation("io.smallrye.config:smallrye-config:3.4.4")
 
