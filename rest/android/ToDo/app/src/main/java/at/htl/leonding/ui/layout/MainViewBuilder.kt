@@ -68,15 +68,11 @@ fun ToDoRow(toDo: ToDo) {
 @Composable
 fun ToDoPreview() {
     val model = Model()
-/*
-    val toDos = listOf(
-        ToDo(1, 1, "First Todo", false),
-        ToDo(2, 2, "Second Todo", true)
-    )
- */
     val todo = ToDo();
+    todo.id = 1
     todo.title = "First Todo"
     model.toDos = arrayOf(todo)
+
     ToDoTheme {
         ToDos(model)
     }

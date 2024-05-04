@@ -8,7 +8,7 @@ import javax.inject.Singleton;
 import dagger.hilt.android.HiltAndroidApp;
 
 /** Our application entry point.
- * Needed for the depenency injection container.
+ * Needed as the dependency injection container.
  */
 @HiltAndroidApp
 @Singleton

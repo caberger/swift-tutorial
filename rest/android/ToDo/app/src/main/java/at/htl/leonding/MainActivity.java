@@ -11,8 +11,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 /** Our main activity implemented in java.
  * We separate the application logic from the view. This is our controller.
- * The View in implemented in Jetpack compose in a separate file (separation of concerns).
- * For the views we use Kotlin, then we still have a nice Design view.
+ * The View is implemented in Jetpack compose in a separate file (separation of concerns).
+ * For the views we use Kotlin in order to keep the nice design preview.
  */
 @AndroidEntryPoint
 public class MainActivity extends ComponentActivity {
