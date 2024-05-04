@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import at.htl.leonding.util.model.Mapper;
+import at.htl.leonding.util.mapper.Mapper;
 
 /** Immer simplifies handling immutable data structures.
  * @see <a>https://immerjs.github.io/immer/</a>

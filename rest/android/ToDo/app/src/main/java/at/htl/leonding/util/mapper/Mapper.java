@@ -1,4 +1,4 @@
-package at.htl.leonding.util.model;
+package at.htl.leonding.util.mapper;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
