@@ -1,4 +1,13 @@
-# Jetpack Compose in Java with kotlin as replacement for layout.xml
+# Jetpack Compose in Java
+
+This app demonstrates how to use well established java jakarta practices to implement an Android Jetpack Compose Application.
+
+The following enterprise apis are used
+
+- Microprofile config to store configuration settings in application.properties
+- Microprofile reasteasy to consume rest - apis
+- Dagger to implement Dependency Injection with jakarta.inject.Inject;
+- RxJava to handle the Single [Source Of Truth](https://redux.js.org/understanding/thinking-in-redux/motivation) design pattern (see also Immer.jaba)
 
 ## Building
 

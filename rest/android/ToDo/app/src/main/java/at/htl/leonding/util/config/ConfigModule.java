@@ -20,13 +20,15 @@ import dagger.hilt.components.SingletonComponent;
 import io.smallrye.config.PropertiesConfigSource;
 import io.smallrye.config.SmallRyeConfigBuilder;
 
+/* Provider of application.properties configuration
+ */
 @Module
 @InstallIn(SingletonComponent.class)
 public class ConfigModule {
     @Provides
     @Singleton
     public Config provideConfiguration() {
-        //return new SmallRyeConfigBuilder().forClassLoader(classLoader).build(); <=== does not work
+        //return new SmallRyeConfigBuilder().forClassLoader(classLoader).build(); <=== does not work on android yet.
 
         var config = new SmallRyeConfigBuilder()
                 .forClassLoader(getClass().getClassLoader())

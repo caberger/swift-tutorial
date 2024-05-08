@@ -25,6 +25,9 @@ public class RestApiClientBuilder {
         scheduledExecutorService = Executors.newScheduledThreadPool(1);
         executorService = Executors.newSingleThreadExecutor();
     }
+    /** Build a reasteasy client
+     * @see <a href="https://github.com/resteasy/resteasy>RESTEasy</a>
+    */
     public <T> T build(Class <? extends T> type, String url) {
         ResteasyProviderFactory.setRegisterBuiltinByDefault(false);
         var factory = ResteasyProviderFactory.getInstance();

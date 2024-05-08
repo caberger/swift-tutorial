@@ -6,6 +6,10 @@ import java.util.function.Consumer;
 import at.htl.leonding.util.immer.Immer;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
+/** Base class for imlementations using a single source of truth aproach.
+ *
+ * @param <T> the class of the ReadOnly Single Source of Truth.
+ */
 public class Store<T> {
     public final BehaviorSubject<T> pipe;
     public final Immer<T> immer;
