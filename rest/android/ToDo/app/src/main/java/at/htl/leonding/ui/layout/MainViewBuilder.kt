@@ -6,7 +6,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import at.htl.leonding.model.ModelStore
+import at.htl.leonding.model.Store
 import at.htl.leonding.model.Model
 import at.htl.leonding.model.ToDoService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -20,7 +20,7 @@ import javax.inject.Singleton
 @Singleton
 class MainViewBuilder {
     @Inject
-    lateinit var store: ModelStore
+    lateinit var store: Store
 
     @Inject
     lateinit var toDoService: ToDoService
@@ -34,7 +34,6 @@ class MainViewBuilder {
             val viewModel = store.pipe.observeOn(AndroidSchedulers.mainThread()).subscribeAsState(initial = Model()).value
             Surface(
                 modifier = Modifier.fillMaxSize()
-                //color = MaterialTheme.colorScheme.background
             ) {
                 TabScreen(viewModel, store, toDoService)
             }   

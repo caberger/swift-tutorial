@@ -14,11 +14,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import at.htl.leonding.model.Model
-import at.htl.leonding.model.ModelStore
+import at.htl.leonding.model.Store
 import at.htl.leonding.model.ToDoService
 
 @Composable
-fun HomeScreen(model: Model, toDoService: ToDoService?, store: ModelStore?) {
+fun HomeScreen(model: Model, toDoService: ToDoService?, store: Store?) {
     val todos = model.toDos;
     Column(modifier = Modifier.fillMaxSize()) {
         Row(modifier = Modifier

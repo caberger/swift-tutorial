@@ -10,11 +10,11 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
  *
  * @param <T> the class of the ReadOnly Single Source of Truth.
  */
-public class Store<T> {
+public class StoreBase<T> {
     public final BehaviorSubject<T> pipe;
     public final Immer<T> immer;
 
-    protected Store(Class<? extends T> type, T initialState) {
+    protected StoreBase(Class<? extends T> type, T initialState) {
         try {
             pipe = BehaviorSubject.createDefault(initialState);
             immer = new Immer<T>(type);

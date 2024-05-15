@@ -16,13 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import at.htl.leonding.model.Model
-import at.htl.leonding.model.ModelStore
+import at.htl.leonding.model.Store
 import at.htl.leonding.model.ToDo
 import at.htl.leonding.model.ToDoService
 import at.htl.leonding.ui.theme.ToDoTheme
 
 @Composable
-fun TabScreen(model: Model, store: ModelStore?, toDoService: ToDoService?) {
+fun TabScreen(model: Model, store: Store?, toDoService: ToDoService?) {
     var uiState = model.uiState
     val tabIndex = uiState.selectedTab
     val tabs = listOf("Home", "ToDos", "Settings")
