@@ -12,7 +12,11 @@ public class ModelStore extends Store<Model> {
     ModelStore() {
         super(Model.class, new Model());
     }
+
     public void setTodos(ToDo[] toDos) {
         apply(model -> model.toDos = toDos);
+    }
+    public void selectTab(int tabIndex) {
+        apply(model -> model.uiState.selectedTab = tabIndex);
     }
 }

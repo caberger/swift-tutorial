@@ -5,7 +5,6 @@ import android.os.Bundle;
 import javax.inject.Inject;
 
 import androidx.activity.ComponentActivity;
-import at.htl.leonding.model.ToDoService;
 import at.htl.leonding.ui.layout.MainViewBuilder;
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -18,15 +17,10 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class MainActivity extends ComponentActivity {
     public static final String TAG = MainActivity.class.getName();
     @Inject
-    ToDoService toDoService;
-    @Inject
     MainViewBuilder mainView;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainView.setContentOfActivity(this);
-
-        toDoService.getAll();
     }
 }

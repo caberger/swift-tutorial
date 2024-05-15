@@ -21,9 +21,8 @@ public class Immer<T> {
     public Immer(Class<? extends T> type) {
         mapper = new Mapper<T>(type);
     }
-
     /**
-     * @param readonlyState the readonly readonlyState
+     * @param readonlyState the previous readonly single source or truth
      * @param recipe the callback function that modifies the cloned state
      * @return
      */
