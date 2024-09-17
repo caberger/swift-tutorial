@@ -6,8 +6,9 @@ import java.util.function.Consumer;
 import at.htl.leonding.util.immer.Immer;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
-/** Base class for imlementations using a single source of truth aproach.
- *
+/** Base class for implementations using a single source of truth approach.
+ * @see <a href="https://redux.js.org/understanding/thinking-in-redux/three-principles">single source of truth</a>
+ * @author Christian Aberger (http://www.aberger.at)
  * @param <T> the class of the ReadOnly Single Source of Truth.
  */
 public class StoreBase<T> {
@@ -22,7 +23,13 @@ public class StoreBase<T> {
             throw new CompletionException(e);
         }
     }
+
+    /** clone the current Model, apply the recipe to it and submit it to the pipe as the next Model.
+     * @param recipe
+     * The function that receives a clone of the current model and applies its changes to it.
+     */
     public void apply(Consumer<T> recipe) {
-        pipe.onNext(immer.produce(pipe.getValue(), recipe));
+        Consumer<T> onNext = nextState -> pipe.onNext(nextState);
+        immer.produce(pipe.getValue(), recipe, onNext);
     }
 }

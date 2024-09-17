@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -14,7 +15,7 @@ import at.htl.leonding.model.ToDo
 
 @Composable
 fun ToDos(model: Model) {
-    val todos = model.toDos
+    val todos = remember{ model.toDos }
 
     LazyColumn (modifier = Modifier.fillMaxSize().padding(16.dp)) {
         items(todos.size) { index ->

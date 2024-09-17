@@ -6,8 +6,11 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import at.htl.leonding.util.mapper.Mapper;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
 /** Immer simplifies handling immutable data structures.
+ * @author Christian Aberger (http://www.aberger.at)
  * @see <a>https://immerjs.github.io/immer/</a>
  * @see <a>https://redux.js.org/understanding/thinking-in-redux/motivation</a>
  *
@@ -15,20 +18,24 @@ import at.htl.leonding.util.mapper.Mapper;
  */
 @Singleton
 public class Immer<T> {
-    public final Mapper<T> mapper;
+    final Mapper<T> mapper;
 
     @Inject
     public Immer(Class<? extends T> type) {
         mapper = new Mapper<T>(type);
     }
-    /**
+    /** Create a deep clone of the existing model.
+     * To avoid multithreading issues we change things only running on the one and only Main thread of the app.
      * @param readonlyState the previous readonly single source or truth
      * @param recipe the callback function that modifies the cloned state
-     * @return
+     * @param resultConsumer the callback function that uses the cloned & modified model
      */
-    public T produce(final T readonlyState, Consumer<T> recipe) {
+    public void produce(final T readonlyState, Consumer<T> recipe, Consumer<T> resultConsumer) {
         var nextState = mapper.clone(readonlyState);
-        recipe.accept(nextState);
-        return nextState;
+        var threadSafe = BehaviorSubject.createDefault(nextState);
+        threadSafe.observeOn(AndroidSchedulers.mainThread()).subscribe(model -> {
+            recipe.accept(model);
+            resultConsumer.accept(model);
+        });
     }
 }

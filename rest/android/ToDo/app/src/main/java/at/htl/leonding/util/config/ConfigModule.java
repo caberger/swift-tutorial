@@ -20,7 +20,8 @@ import dagger.hilt.components.SingletonComponent;
 import io.smallrye.config.PropertiesConfigSource;
 import io.smallrye.config.SmallRyeConfigBuilder;
 
-/* Provider of application.properties configuration
+/* Provide <a href="https://microprofile.io/project/eclipse/microprofile-config">ecplipse microprofile config</a> settings
+    (see src/main/resources/application.properties)
  */
 @Module
 @InstallIn(SingletonComponent.class)
